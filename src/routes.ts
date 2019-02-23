@@ -1,9 +1,11 @@
 import { Example } from "./entities/example";
 import { Response } from "./entities/response";
 import { Reportes } from "./func/reportes";
+import { Usuarios } from "./func/usuarios";
 
 export const Routes = (app: any, cors: any) => {
     const rFuncs = new Reportes();
+    const uFuncs = new Usuarios();
     const corsOptions = {
         optionsSuccessStatus: 200,
         origin: "*"
@@ -51,5 +53,12 @@ export const Routes = (app: any, cors: any) => {
                 res.send(false);
             }
         }
+    });
+
+    app.get("/usuarios", (req: any, res: any, next: any) => {
+        uFuncs.obtenerUsuariosTodos().then((value: any) => {
+            res.set({"Content-Type": "application/json"});
+            res.json(value);
+        });
     });
 };
