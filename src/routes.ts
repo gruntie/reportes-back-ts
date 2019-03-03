@@ -41,9 +41,34 @@ export const Routes = (app: any, cors: any) => {
 
     app.post("/altaUsuario", cors(corsOptions), (req: any, res: any) => {
         try {
-            const datos = [ req.body.nombre, req.body.login, req.body.password ];
-            const result = rFuncs.altaUsuario(datos);
-            res.send(result);
+            uFuncs.altaUsuario([
+                req.body.nombre,
+                req.body.login,
+                req.body.password
+            ]).then((result: any) => {
+                res.set({"Content-Type": "application/json"});
+                res.send(result);
+            });
+        } catch (err) {
+            res.status(500);
+            if (err instanceof RangeError) {
+                failResp.message = "Error en payload";
+                res.send(failResp);
+            } else {
+                res.send(false);
+            }
+        }
+    });
+
+    app.post("/login", cors(corsOptions), (req: any, res: any) => {
+        try {
+            uFuncs.verificaLogin([
+                req.body.login,
+                req.body.password
+            ]).then((result: any) => {
+                res.set({"Content-Type": "application/json"});
+                res.send(JSON.stringify(result));
+            });
         } catch (err) {
             res.status(500);
             if (err instanceof RangeError) {

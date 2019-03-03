@@ -12,53 +12,10 @@ export class SQLite {
     }
 
     // for queries
-    // public query = (q: string): any => {
-    //     const data = new Array<any>();
-    //     this.db.each(q, (err: any, row: any) => {
-    //         data.push( row );
-    //     });
-
-    //     return data;
-    // }
-
-    // public query = (q: string, callback: any): void => {
-    //     const data = new Array<any>();
-    //     this.db.each(q, (err: any, row: any) => {
-    //         if (err) {
-    //             throw err;
-    //         } else {
-    //             data.push( row );
-    //         }
-    //     }, () => {
-    //         callback(data);
-    //         this.close();
-    //     });
-    // }
-
-    // public query = (q: string): any => {
-    //     const data = new Array<any>();
-    //     this.db.all(q, [], (err: any, rows: any) => {
-    //         if (err) {
-    //             throw err;
-    //         }
-
-    //         rows.forEach((row: any) => {
-    //             data.push(row);
-    //         });
-
-    //         // tslint:disable-next-line:no-console
-    //         console.log(data);
-    //     });
-
-    //     // tslint:disable-next-line:no-console
-    //     console.log(data);
-    //     this.close();
-    //     return data;
-    // }
-
-    // for queries
-    public query = (q: string): any => {
-        const rows = this.betterdb.prepare(q).all();
+    public query = (q: string, params: any): any => {
+        const rows = (params === null || params === undefined) ?
+            this.betterdb.prepare(q).all() :
+            this.betterdb.prepare(q).get(params);
         this.betterdb.close();
         return rows;
     }
